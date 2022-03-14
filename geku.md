@@ -53,7 +53,7 @@ The first execution of the run script will build the necessary docker containers
 
 # Run
 
-This command will build the docker containers
+This command will build (once) and run the docker containers
 * GETH (Execution Layer)
 * TEKU (Consensus Layer)
 
