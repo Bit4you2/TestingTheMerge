@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  geth-kiln:
+    build: geth/.
+    restart: unless-stopped
+    container_name: geth-kiln
+    volumes:
+      - ./volumes/data_eth_kiln:/root/.ethereum
+      - '/etc/passwd:/etc/passwd:ro'
+      - '/etc/group:/etc/group:ro'
+      - ./scripts:/scripts
+      - ./volumes/jwt:/tmp/jwt
+    ports:
+      # HTTP server / GraphQL API
+      - 9745:8545
+      # WebSocket
+      - 9746:8546
+      # Network listening port (P2P networking)
+      - 37309:30304
+    entrypoint: []
+    command: sh /scripts/start-geth.sh
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.7
+  teku-kiln:
+    environment:
+      - "JAVA_OPTS=-Xmx4g"
+    build: teku/.
+    entrypoint: []
+    command: sh /scripts/start-teku.sh
+    depends_on:
+      - geth-kiln
+    volumes:
+      - ./validator_keys:/opt/teku/data
+      - ./scripts:/scripts
+      - ./volumes/jwt:/tmp/jwt
+    ports:
+      # Map the p2p port(9000) and REST API port(5051)
+      - "9000:9000"
+      - "5051:5051"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.8
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
