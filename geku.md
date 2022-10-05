@@ -22,7 +22,7 @@ Please submit a PR if you are able to get it working in other environments.
 
 This script will generate the:
 - Password
-- Mneominc
+- Mnemonic
 - Keystores
 - Password `.txt` file(s) (corresponding to each `.json` file)
 - Token (`jwtsecret`)
@@ -53,7 +53,7 @@ The first execution of the run script will build the necessary docker containers
 
 # Run
 
-This command will build the docker containers
+This command will build (once) and run the docker containers
 * GETH (Execution Layer)
 * TEKU (Consensus Layer)
 
