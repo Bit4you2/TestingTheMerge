@@ -27,6 +27,8 @@ services:
     environment:
       - "JAVA_OPTS=-Xmx4g"
     build: teku/.
+   #image: consensys/teku:latest
+    restart: unless-stopped
     entrypoint: []
     command: sh /scripts/start-teku.sh
     depends_on:
@@ -39,6 +41,9 @@ services:
       # Map the p2p port(9000) and REST API port(5051)
       - "9000:9000"
       - "5051:5051"
+      - "9008:8008"
+      - "8008:9008"
+      # Metrics
     networks:
       vpcbr:
         ipv4_address: 10.5.0.8
